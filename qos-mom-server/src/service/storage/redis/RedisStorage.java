@@ -43,6 +43,5 @@ public class RedisStorage implements MessageStorage {
 
 	private void returnResource(Jedis resource) {
 		this.pool.returnResource(resource);
-		
 	}
 }
