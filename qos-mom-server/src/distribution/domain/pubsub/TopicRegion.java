@@ -15,7 +15,7 @@ public class TopicRegion {
 		this.subscriptions = new ConcurrentHashMap<String, List<Subscription>>();
 	}
 
-	public void publish(Message msg, String topic) {
+	public synchronized void publish(String topic, Message msg) {
 		
 	}
 
