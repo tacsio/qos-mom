@@ -18,25 +18,25 @@ public class Configuration {
 	private static final String CONFIG = "config.xml";
 
 	@XmlElement(name = "server-host")
-	private String host;
+	private String serverHost;
 
 	@XmlElement(name = "server-port")
-	private int port;
+	private int serverPort;
 
-	public String getHost() {
-		return host;
+	public String getServerHost() {
+		return serverHost;
 	}
 
-	public void setHost(String host) {
-		this.host = host;
+	public void setServerHost(String serverHost) {
+		this.serverHost = serverHost;
 	}
 
-	public void setPort(int port) {
-		this.port = port;
+	public int getServerPort() {
+		return serverPort;
 	}
 
-	public int getPort() {
-		return port;
+	public void setServerPort(int serverPort) {
+		this.serverPort = serverPort;
 	}
 
 	public static Configuration load() {

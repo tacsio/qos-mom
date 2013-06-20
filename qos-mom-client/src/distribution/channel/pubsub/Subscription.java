@@ -1,4 +1,4 @@
-package distribution.domain.pubsub;
+package distribution.channel.pubsub;
 
 public class Subscription {
 

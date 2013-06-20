@@ -1,21 +1,30 @@
-package distribution.domain.ptp;
+package distribution.channel.ptp;
+
+import infrastructure.Broker;
 
 import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingDeque;
 
-import distribution.domain.Message;
+import util.Configuration;
+import distribution.message.Message;
 
-public class QueueRegion {
+public class QueueChannel {
 
 	private Map<String, Queue<Message>> queues;
+	private Broker broker;
+	private Configuration config;
 
-	public QueueRegion() {
+	public QueueChannel() {
 		this.queues = new ConcurrentHashMap<String, Queue<Message>>();
+		this.config = Configuration.load();
+		this.broker = new Broker(this, config.getPort());
+		Thread listener = new Thread(this.broker);
+		listener.run();
 	}
 
-	public void add(String queueName, Message msg) {
+	public synchronized void add(String queueName, Message msg) {
 		if (!this.queues.containsKey(queueName)) {
 			Queue<Message> queue = new LinkedBlockingDeque<Message>();
 			this.queues.put(queueName, queue);
@@ -23,7 +32,7 @@ public class QueueRegion {
 		this.queues.get(queueName).add(msg);
 	}
 
-	public Message receive(String queueName) {
+	public synchronized Message receive(String queueName) {
 		Message msg = null;
 		if (this.queues.containsKey(queueName)) {
 			msg = this.queues.get(queueName).poll();

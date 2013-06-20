@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import distribution.channel.pubsub.Subscription;
 import distribution.message.Message;
 
+
 public class JsonSerializer {
 
 	private static JsonSerializer instance;

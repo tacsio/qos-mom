@@ -1,16 +1,16 @@
 package json;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Test;
 
-import distribution.domain.Message;
-import distribution.domain.pubsub.Subscription;
-
 import service.marshalling.JsonSerializer;
+import distribution.channel.pubsub.Subscription;
+import distribution.message.Message;
 
 public class SerializerSpec {
 

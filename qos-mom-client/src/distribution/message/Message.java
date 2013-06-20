@@ -1,4 +1,4 @@
-package distribution.domain;
+package distribution.message;
 
 import java.util.Map;
 

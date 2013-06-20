@@ -7,24 +7,34 @@ import java.net.Socket;
 
 import service.marshalling.JsonSerializer;
 import util.Constants;
-import distribution.domain.Message;
-import distribution.domain.ptp.QueueRegion;
-import distribution.domain.pubsub.TopicRegion;
+import distribution.channel.ptp.QueueChannel;
+import distribution.channel.pubsub.TopicChannel;
+import distribution.message.Message;
 
 public class Broker implements Runnable {
 
 	private int port;
-	private QueueRegion queueRegion;
-	private TopicRegion topicRegion;
+	private QueueChannel queueRegion;
+	private TopicChannel topicRegion;
 
-	public Broker(int port) {
+	public Broker(QueueChannel queueRegion, int port) {
 		this.port = port;
-		this.queueRegion = new QueueRegion();
+		this.queueRegion = queueRegion;
+	}
+	
+	public Broker(TopicChannel topicRegion, int port) {
+		this.port = port;
+		this.topicRegion = topicRegion;
+	}
+	
+	public void send() {
+		
 	}
 
 	@Override
 	public void run() {
-
+		System.out.println("Start server");
+		//receive msgs
 		try {
 			ServerSocket listenSocket = new ServerSocket(this.port);
 			Socket connection;
@@ -38,14 +48,14 @@ public class Broker implements Runnable {
 				String jsonMessage = (String) input.readObject();
 				Message message = JsonSerializer.getInstance().getMessage(
 						jsonMessage);
-				if (message.getHeaders().get(Constants.DOMAIN)
-						.equals(Constants.DOMAIN_PTP)) {
+				if (message.getHeaders().get(Constants.CHANNEL)
+						.equals(Constants.CHANNEL_PTP)) {
 
 					String queueName = message.getHeaders().get(
 							Constants.QUEUE_NAME);
 					this.queueRegion.add(queueName, message);
-				} else if (message.getHeaders().get(Constants.DOMAIN)
-						.equals(Constants.DOMAIN_PTP)) {
+				} else if (message.getHeaders().get(Constants.CHANNEL)
+						.equals(Constants.CHANNEL_PTP)) {
 					String topicName = message.getHeaders().get(
 							Constants.TOPIC_NAME);
 					this.topicRegion.publish(topicName, message);

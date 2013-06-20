@@ -1,6 +1,7 @@
 package queue;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,16 +9,16 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 
-import distribution.domain.Message;
-import distribution.domain.ptp.QueueRegion;
+import distribution.channel.ptp.QueueChannel;
+import distribution.message.Message;
 
-public class QueueRegionSpec {
+public class QueueChannelSpec {
 
-	private QueueRegion queue;
+	private QueueChannel queue;
 	
 	@Before
 	public void setUp() {
-		this.queue = new QueueRegion();
+		this.queue = new QueueChannel();
 	}
 	
 	@Test

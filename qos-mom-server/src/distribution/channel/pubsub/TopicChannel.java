@@ -1,17 +1,17 @@
-package distribution.domain.pubsub;
+package distribution.channel.pubsub;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import distribution.domain.Message;
+import distribution.message.Message;
 
-public class TopicRegion {
+public class TopicChannel {
 
 	private Map<String, List<Subscription>> subscriptions;
 
-	public TopicRegion() {
+	public TopicChannel() {
 		this.subscriptions = new ConcurrentHashMap<String, List<Subscription>>();
 	}
 
