@@ -1,5 +1,7 @@
 package distribution.channel.ptp;
 
+import java.io.IOException;
+import java.net.UnknownHostException;
 import java.util.Map;
 
 import util.Configuration;
@@ -9,13 +11,22 @@ import distribution.message.Message;
 
 public class QueueChannel {
 
+	private static QueueChannel instance;
 	private Broker broker;
 	private Configuration config;
 
-	public QueueChannel() {
+	public static QueueChannel getInstance() {
+		if (null == instance) {
+			instance = new QueueChannel();
+		}
+		return instance;
+	}
+
+	private QueueChannel() {
 		this.config = Configuration.load();
-		this.broker = new Broker(this.config.getServerHost(),
-				this.config.getServerPort());
+		this.broker = Broker.getBroker(this.config.getServerHost(),
+				this.config.getServerPtpPort());
+		this.broker.setQueueChannel(this);
 	}
 
 	public void send(String queueName, Message msg) {
@@ -25,7 +36,14 @@ public class QueueChannel {
 		headers.put(Constants.QUEUE_NAME, queueName);
 		msg.setHeaders(headers);
 
-		this.broker.send(msg);
+		try {
+			this.broker.send(msg);
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+			// TODO: add on non sended list
+		} catch (IOException e) {
+			e.printStackTrace();
+			// TODO: add on non sended list
+		}
 	}
-
 }

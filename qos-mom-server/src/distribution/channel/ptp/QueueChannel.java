@@ -21,7 +21,7 @@ public class QueueChannel {
 		this.config = Configuration.load();
 		this.broker = new Broker(this, config.getPort());
 		Thread listener = new Thread(this.broker);
-		listener.run();
+		listener.start();
 	}
 
 	public synchronized void add(String queueName, Message msg) {

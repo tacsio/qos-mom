@@ -1,11 +1,14 @@
 package distribution.channel.pubsub;
 
-public class Subscription {
+import distribution.message.Message;
+
+public abstract class Subscription {
 
 	private String topic;
 
 	private String source;
-	
+
+	public abstract void onMessage(String topic, Message msg);
 
 	public String getTopic() {
 		return topic;
@@ -14,7 +17,7 @@ public class Subscription {
 	public void setTopic(String topic) {
 		this.topic = topic;
 	}
-	
+
 	public String getSource() {
 		return source;
 	}
@@ -22,7 +25,7 @@ public class Subscription {
 	public void setSource(String source) {
 		this.source = source;
 	}
-	
+
 	public String toString() {
 		return "Subscription [topic=" + topic + ", source=" + source + "]";
 	}

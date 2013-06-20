@@ -20,23 +20,23 @@ public class Configuration {
 	@XmlElement(name = "server-host")
 	private String serverHost;
 
-	@XmlElement(name = "server-port")
-	private int serverPort;
+	@XmlElement(name = "ptp-port")
+	private int serverPubSubPort;
 
+	@XmlElement(name ="pubsub-port")
+	private int serverPtpPort;
+
+	
 	public String getServerHost() {
 		return serverHost;
 	}
 
-	public void setServerHost(String serverHost) {
-		this.serverHost = serverHost;
+	public int getServerPubSubPort() {
+		return serverPubSubPort;
 	}
 
-	public int getServerPort() {
-		return serverPort;
-	}
-
-	public void setServerPort(int serverPort) {
-		this.serverPort = serverPort;
+	public int getServerPtpPort() {
+		return serverPtpPort;
 	}
 
 	public static Configuration load() {
@@ -55,6 +55,7 @@ public class Configuration {
 	}
 	
 	public static void main(String[] args) {
-		Configuration.load();
+		Configuration c = Configuration.load();
+		System.out.println(c);
 	}
 }

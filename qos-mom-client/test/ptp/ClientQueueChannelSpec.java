@@ -1,6 +1,6 @@
 package ptp;
 
-import static org.junit.Assert.*;
+//import static org.junit.Assert.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,18 +14,18 @@ import distribution.message.Message;
 public class ClientQueueChannelSpec {
 
 	private QueueChannel queue;
-	
+
 	@Before
-	public void setUp(){
-		this.queue = new QueueChannel();
+	public void setUp() {
+		this.queue = QueueChannel.getInstance();
 	}
-	
+
 	@Test
 	public void testSendMessage() {
 		this.queue.send("test", getMessage());
 		this.queue.send("test2", getMessage());
 	}
-	
+
 	private Message getMessage() {
 		Map<String, String> headers = new HashMap<String, String>();
 		headers.put("source", "localhost");

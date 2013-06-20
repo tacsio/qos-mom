@@ -1,5 +1,7 @@
 package distribution.channel.pubsub;
 
+import infrastructure.Broker;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +12,7 @@ import distribution.message.Message;
 public class TopicChannel {
 
 	private Map<String, List<Subscription>> subscriptions;
+	private Broker broker;
 
 	public TopicChannel() {
 		this.subscriptions = new ConcurrentHashMap<String, List<Subscription>>();
