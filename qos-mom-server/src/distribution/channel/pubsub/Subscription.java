@@ -5,7 +5,6 @@ public class Subscription {
 	private String topic;
 
 	private String source;
-	
 
 	public String getTopic() {
 		return topic;

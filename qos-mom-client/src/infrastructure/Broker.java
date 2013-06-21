@@ -17,6 +17,9 @@ public class Broker implements Runnable {
 
 	private static Broker instance;
 
+	private int localPort;
+	private String localIp;
+
 	private int serverPort;
 	private String serverHost;
 	private QueueChannel queueChannel;
@@ -44,6 +47,14 @@ public class Broker implements Runnable {
 		this.topicChannel = topicChannel;
 	}
 
+	public String getLocalIp() {
+		return this.localIp;
+	}
+
+	public int getLocalPort() {
+		return this.localPort;
+	}
+
 	public void send(Message msg) throws UnknownHostException, IOException {
 		String json = JsonSerializer.getInstance().getJson(msg);
 		Socket client = new Socket(this.serverHost, this.serverPort);
@@ -62,6 +73,11 @@ public class Broker implements Runnable {
 
 		try {
 			ServerSocket listenSocket = new ServerSocket(this.serverPort);
+
+			this.localIp = listenSocket.getInetAddress().getHostAddress();
+			this.localPort = listenSocket.getLocalPort();
+			// TODO: verificar porta
+
 			Socket connection;
 			ObjectInputStream input;
 			// ObjectOutputStream output;
@@ -75,9 +91,11 @@ public class Broker implements Runnable {
 				Message message = JsonSerializer.getInstance().getMessage(
 						jsonMessage);
 
-				if(message.getHeaders().get(Constants.CHANNEL).equals(Constants.CHANNEL_PTP)){
-					//receive msg
-				} else if(message.getHeaders().get(Constants.CHANNEL).equals(Constants.CHANNEL_TOPIC)){
+				if (message.getHeaders().get(Constants.CHANNEL)
+						.equals(Constants.CHANNEL_PTP)) {
+					// receive msg
+				} else if (message.getHeaders().get(Constants.CHANNEL)
+						.equals(Constants.CHANNEL_TOPIC)) {
 					this.topicChannel.updateSubscribers(message);
 				}
 			}

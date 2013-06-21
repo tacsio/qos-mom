@@ -2,7 +2,6 @@ package service.marshalling;
 
 import com.google.gson.Gson;
 
-import distribution.channel.pubsub.Subscription;
 import distribution.message.Message;
 
 
@@ -32,10 +31,4 @@ public class JsonSerializer {
 		Message msg = this.gson.fromJson(json, Message.class);
 		return msg;
 	}
-
-	public Subscription getSubscription(String json) {
-		Subscription sub = this.gson.fromJson(json, Subscription.class);
-		return sub;
-	}
-
 }

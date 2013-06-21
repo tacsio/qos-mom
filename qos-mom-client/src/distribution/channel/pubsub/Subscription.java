@@ -6,6 +6,7 @@ public abstract class Subscription {
 
 	private String topic;
 
+	//ip:port
 	private String source;
 
 	public abstract void onMessage(String topic, Message msg);
@@ -25,7 +26,7 @@ public abstract class Subscription {
 	public void setSource(String source) {
 		this.source = source;
 	}
-
+	
 	public String toString() {
 		return "Subscription [topic=" + topic + ", source=" + source + "]";
 	}
