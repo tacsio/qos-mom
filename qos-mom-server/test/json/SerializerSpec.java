@@ -9,8 +9,8 @@ import java.util.Map;
 import org.junit.Test;
 
 import service.marshalling.JsonSerializer;
-import distribution.channel.pubsub.Subscription;
 import distribution.message.Message;
+import distribution.message.Subscription;
 
 public class SerializerSpec {
 

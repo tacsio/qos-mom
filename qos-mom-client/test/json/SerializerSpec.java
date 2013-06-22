@@ -5,8 +5,8 @@ import static org.junit.Assert.assertNotNull;
 import org.junit.Test;
 
 import service.marshalling.JsonSerializer;
-import distribution.channel.pubsub.Subscription;
 import distribution.message.Message;
+import distribution.message.Subscription;
 
 public class SerializerSpec {
 
@@ -22,7 +22,8 @@ public class SerializerSpec {
 	private Subscription getSubscription() {
 		Subscription sub = new QosSubscription();
 		sub.setTopic("qos");
-		sub.setSource("localhost:15");
+		sub.setIp("localhost");
+		sub.setPort(15);
 		
 		return sub;
 	}

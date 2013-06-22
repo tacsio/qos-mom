@@ -2,33 +2,42 @@ package infrastructure;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 import service.marshalling.JsonSerializer;
 import util.Constants;
 import distribution.channel.ptp.QueueChannel;
 import distribution.channel.pubsub.TopicChannel;
 import distribution.message.Message;
+import distribution.message.Subscription;
 
 public class Broker implements Runnable {
 
 	private int port;
-	private QueueChannel queueRegion;
-	private TopicChannel topicRegion;
+	private QueueChannel queueChannel;
+	private TopicChannel topicChannel;
 
 	public Broker(QueueChannel queueRegion, int port) {
 		this.port = port;
-		this.queueRegion = queueRegion;
+		this.queueChannel = queueRegion;
 	}
 	
 	public Broker(TopicChannel topicRegion, int port) {
 		this.port = port;
-		this.topicRegion = topicRegion;
+		this.topicChannel = topicRegion;
 	}
 	
-	public void send() {
+	public void send(Message msg, String ip, int port) throws UnknownHostException, IOException {
+		String json = JsonSerializer.getInstance().getJson(msg);
+		Socket socket = new Socket(ip, port);
 		
+		ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+		out.writeObject(json);
+		out.flush();
+		socket.close();
 	}
 
 	@Override
@@ -48,17 +57,26 @@ public class Broker implements Runnable {
 				String jsonMessage = (String) input.readObject();
 				Message message = JsonSerializer.getInstance().getMessage(
 						jsonMessage);
-				if (message.getHeaders().get(Constants.CHANNEL)
+				
+				//filter subscriptions (topic region)
+				if(message.getHeaders().get(Constants.MESSAGE_TYPE).equals(Constants.SUBSCRIPTION_TYPE)){
+					//the message payload contains json serialized subscription
+					Subscription subscription = JsonSerializer.getInstance().getSubscription(message.getPayload());
+					this.topicChannel.subscribe(subscription);
+				//filter channel queue
+				} else if (message.getHeaders().get(Constants.CHANNEL)
 						.equals(Constants.CHANNEL_PTP)) {
 
 					String queueName = message.getHeaders().get(
 							Constants.QUEUE_NAME);
-					this.queueRegion.add(queueName, message);
+					this.queueChannel.add(queueName, message);
+				
+				//filter channel topic
 				} else if (message.getHeaders().get(Constants.CHANNEL)
-						.equals(Constants.CHANNEL_PTP)) {
+						.equals(Constants.CHANNEL_TOPIC)) {
 					String topicName = message.getHeaders().get(
 							Constants.TOPIC_NAME);
-					this.topicRegion.publish(topicName, message);
+					this.topicChannel.updateSubscribers(topicName, message);
 				}
 			}
 		} catch (IOException e) {

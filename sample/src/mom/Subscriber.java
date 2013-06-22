@@ -1,7 +1,7 @@
 package mom;
 
-import distribution.channel.pubsub.Subscription;
 import distribution.channel.pubsub.TopicChannel;
+import distribution.message.Subscription;
 
 public class Subscriber {
 

@@ -13,13 +13,14 @@ import service.marshalling.JsonSerializer;
 import util.Configuration;
 import util.Constants;
 import distribution.message.Message;
+import distribution.message.Subscription;
 
 public class TopicChannel {
 
 	private static TopicChannel instance;
 	private Broker broker;
 	private Configuration config;
-	private Map<String, List<Subscription>> subscriptions;
+	private volatile Map<String, List<Subscription>> subscriptions;
 
 	public static TopicChannel getInstance() {
 		if (null == instance) {
@@ -60,8 +61,8 @@ public class TopicChannel {
 		}
 		// Armazena calback (vira do subscription chamada do método onMessage)
 		// o mapa de callback por topico eh chamado via updateSubscrivers
-		subscription.setSource(String.format("%s:%s", this.broker.getLocalIp(),
-				this.broker.getLocalPort()));
+		subscription.setIp(this.broker.getLocalIp());//TODO: validade
+		subscription.setPort(this.broker.getLocalPort());//TODO: validade
 		subscription.setTopic(topic);
 		this.subscriptions.get(topic).add(subscription);
 
@@ -74,8 +75,10 @@ public class TopicChannel {
 			this.broker.send(subscriptionMsg);
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
+			//TODO: mom off
 		} catch (IOException e) {
 			e.printStackTrace();
+			//TODO: mom off
 		}
 	}
 

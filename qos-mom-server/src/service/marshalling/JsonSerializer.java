@@ -2,8 +2,8 @@ package service.marshalling;
 
 import com.google.gson.Gson;
 
-import distribution.channel.pubsub.Subscription;
 import distribution.message.Message;
+import distribution.message.Subscription;
 
 public class JsonSerializer {
 
