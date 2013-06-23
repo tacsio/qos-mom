@@ -53,9 +53,4 @@ public class Configuration {
 		return config;
 
 	}
-	
-	public static void main(String[] args) {
-		Configuration c = Configuration.load();
-		System.out.println(c);
-	}
 }
