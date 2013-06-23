@@ -25,7 +25,7 @@ public class QueueChannel {
 	private QueueChannel() {
 		this.config = Configuration.load();
 		this.broker = Broker.getBroker(this.config.getServerHost(),
-				this.config.getServerPtpPort());
+				this.config.getServerPtpPort(), this.config.getListenerPort());
 		this.broker.setQueueChannel(this);
 	}
 

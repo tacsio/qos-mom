@@ -26,7 +26,14 @@ public class Configuration {
 	@XmlElement(name ="pubsub-port")
 	private int serverPtpPort;
 
+	@XmlElement(name ="listener-port")
+	private int listenerPort;
 	
+	
+	public int getListenerPort() {
+		return listenerPort;
+	}
+
 	public String getServerHost() {
 		return serverHost;
 	}

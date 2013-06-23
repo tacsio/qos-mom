@@ -3,6 +3,7 @@ package infrastructure;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.Inet4Address;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -17,26 +18,33 @@ public class Broker implements Runnable {
 
 	private static Broker instance;
 
-	private int localPort;
+	private int listenerPort;
 	private String localIp;
-
 	private int serverPort;
+
 	private String serverHost;
 	private QueueChannel queueChannel;
 	private TopicChannel topicChannel;
 
-	public static Broker getBroker(String serverHost, int serverPort) {
+	public static Broker getBroker(String serverHost, int serverPort,
+			int listenerPort) {
 		if (null == instance) {
-			instance = new Broker(serverHost, serverPort);
+			instance = new Broker(serverHost, serverPort, listenerPort);
 			Thread listener = new Thread(instance);
 			listener.start();
 		}
 		return instance;
 	}
 
-	private Broker(String serverHost, int serverPort) {
+	private Broker(String serverHost, int serverPort, int listenerPort) {
 		this.serverPort = serverPort;
 		this.serverHost = serverHost;
+		this.listenerPort = listenerPort;
+		try {
+			this.localIp = Inet4Address.getLocalHost().getHostAddress();
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void setQueueChannel(QueueChannel queueChannel) {
@@ -51,8 +59,8 @@ public class Broker implements Runnable {
 		return this.localIp;
 	}
 
-	public int getLocalPort() {
-		return this.localPort;
+	public int getListenerPort() {
+		return this.listenerPort;
 	}
 
 	public void send(Message msg) throws UnknownHostException, IOException {
@@ -69,15 +77,10 @@ public class Broker implements Runnable {
 	@Override
 	public void run() {
 		// retorno de msg sao todas de subiscricoes
-		System.out.println("Start listener");
+		System.out.println("Start listener on " + this.listenerPort);
 
 		try {
-			ServerSocket listenSocket = new ServerSocket(this.serverPort);
-
-			this.localIp = listenSocket.getInetAddress().getHostAddress();
-			this.localPort = listenSocket.getLocalPort();
-			// TODO: verificar porta
-
+			ServerSocket listenSocket = new ServerSocket(this.listenerPort);
 			Socket connection;
 			ObjectInputStream input;
 			// ObjectOutputStream output;

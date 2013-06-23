@@ -33,7 +33,8 @@ public class TopicChannel {
 		this.subscriptions = new ConcurrentHashMap<String, List<Subscription>>();
 		this.config = Configuration.load();
 		this.broker = Broker.getBroker(this.config.getServerHost(),
-				this.config.getServerPubSubPort());
+				this.config.getServerPubSubPort(),
+				this.config.getListenerPort());
 		this.broker.setTopicChannel(this);
 	}
 
@@ -61,8 +62,8 @@ public class TopicChannel {
 		}
 		// Armazena calback (vira do subscription chamada do método onMessage)
 		// o mapa de callback por topico eh chamado via updateSubscrivers
-		subscription.setIp(this.broker.getLocalIp());//TODO: validade
-		subscription.setPort(this.broker.getLocalPort());//TODO: validade
+		subscription.setIp(this.broker.getLocalIp());
+		subscription.setPort(this.broker.getListenerPort());
 		subscription.setTopic(topic);
 		this.subscriptions.get(topic).add(subscription);
 
@@ -70,15 +71,16 @@ public class TopicChannel {
 		Map<String, String> headers = new HashMap<String, String>();
 		headers.put(Constants.MESSAGE_TYPE, Constants.SUBSCRIPTION_TYPE);
 		subscriptionMsg.setHeaders(headers);
-		subscriptionMsg.setPayload(JsonSerializer.getInstance().getJson(subscription));
+		String json = JsonSerializer.getInstance().getJson(subscription);
+		subscriptionMsg.setPayload(json);
 		try {
 			this.broker.send(subscriptionMsg);
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
-			//TODO: mom off
+			// TODO: mom off
 		} catch (IOException e) {
 			e.printStackTrace();
-			//TODO: mom off
+			// TODO: mom off
 		}
 	}
 

@@ -1,6 +1,5 @@
 package distribution.message;
 
-
 public abstract class Subscription {
 
 	private String topic;
