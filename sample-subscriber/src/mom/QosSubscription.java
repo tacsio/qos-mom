@@ -6,7 +6,7 @@ public class QosSubscription extends distribution.message.Subscription {
 
 	@Override
 	public void onMessage(String topic, Message msg) {
-		System.out.println(msg.toString());
+		System.out.println("Received " + msg.toString());
 	}
 
 }
