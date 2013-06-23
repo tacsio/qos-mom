@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<configuration>
-	<server-host>localhost</server-host>
-	<ptp-port>6561</ptp-port>
-	<pubsub-port>6562</pubsub-port>
-</configuration>

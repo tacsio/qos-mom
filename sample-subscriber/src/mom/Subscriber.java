@@ -8,6 +8,10 @@ public class Subscriber {
 	public Subscriber() {
 		TopicChannel channel = TopicChannel.getInstance();
 		Subscription subscription = new QosSubscription();
-		channel.subscribe("teste", subscription);
+		channel.subscribe("test", subscription);
+	}
+	
+	public static void main(String[] args) {
+		new Subscriber();
 	}
 }

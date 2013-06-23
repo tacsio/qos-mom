@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import util.Configuration;
+
 import distribution.message.Message;
 import distribution.message.Subscription;
 
@@ -16,9 +18,14 @@ public class TopicChannel {
 
 	private volatile Map<String, List<Subscription>> subscriptions;
 	private Broker broker;
+	private Configuration config;
 
 	public TopicChannel() {
 		this.subscriptions = new ConcurrentHashMap<String, List<Subscription>>();
+		this.config = Configuration.load();
+		this.broker = new Broker(this, config.getPort());
+		Thread listener = new Thread(this.broker);
+		listener.start();
 	}
 
 	public synchronized void updateSubscribers(String topic, Message msg) {
