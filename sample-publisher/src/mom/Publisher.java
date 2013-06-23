@@ -14,4 +14,8 @@ public class Publisher {
 			channel.publish("test", msg);
 		}
 	}
+	
+	public static void main(String[] args) {
+		new Publisher();
+	}
 }

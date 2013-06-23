@@ -42,7 +42,7 @@ public class Broker implements Runnable {
 
 	@Override
 	public void run() {
-		System.out.println("Start server");
+		System.out.println("Start server on " + this.port);
 		//receive msgs
 		try {
 			ServerSocket listenSocket = new ServerSocket(this.port);

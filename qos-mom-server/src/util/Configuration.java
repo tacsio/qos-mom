@@ -18,25 +18,25 @@ public class Configuration {
 	private static final String CONFIG = "config.xml";
 
 	@XmlElement(name = "server-host")
-	private String host;
+	private String serverHost;
 
-	@XmlElement(name = "server-port")
-	private int port;
+	@XmlElement(name = "ptp-port")
+	private int serverPubSubPort;
 
-	public String getHost() {
-		return host;
+	@XmlElement(name ="pubsub-port")
+	private int serverPtpPort;
+
+	
+	public String getServerHost() {
+		return serverHost;
 	}
 
-	public void setHost(String host) {
-		this.host = host;
+	public int getServerPubSubPort() {
+		return serverPubSubPort;
 	}
 
-	public void setPort(int port) {
-		this.port = port;
-	}
-
-	public int getPort() {
-		return port;
+	public int getServerPtpPort() {
+		return serverPtpPort;
 	}
 
 	public static Configuration load() {
@@ -52,9 +52,5 @@ public class Configuration {
 		
 		return config;
 
-	}
-	
-	public static void main(String[] args) {
-		Configuration.load();
 	}
 }

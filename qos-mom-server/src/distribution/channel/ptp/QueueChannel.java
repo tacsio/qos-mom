@@ -19,7 +19,7 @@ public class QueueChannel {
 	public QueueChannel() {
 		this.queues = new ConcurrentHashMap<String, Queue<Message>>();
 		this.config = Configuration.load();
-		this.broker = new Broker(this, config.getPort());
+		this.broker = new Broker(this, config.getServerPtpPort());
 		Thread listener = new Thread(this.broker);
 		listener.start();
 	}

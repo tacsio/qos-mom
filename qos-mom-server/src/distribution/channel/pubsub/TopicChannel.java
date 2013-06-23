@@ -23,13 +23,13 @@ public class TopicChannel {
 	public TopicChannel() {
 		this.subscriptions = new ConcurrentHashMap<String, List<Subscription>>();
 		this.config = Configuration.load();
-		this.broker = new Broker(this, config.getPort());
+		this.broker = new Broker(this, config.getServerPubSubPort());
 		Thread listener = new Thread(this.broker);
 		listener.start();
 	}
 
 	public synchronized void updateSubscribers(String topic, Message msg) {
-		for(Subscription s : this.subscriptions.get(topic)){
+		for (Subscription s : this.subscriptions.get(topic)) {
 			try {
 				this.broker.send(msg, s.getIp(), s.getPort());
 			} catch (UnknownHostException e) {
@@ -50,5 +50,9 @@ public class TopicChannel {
 		}
 		subscList.add(subscription);
 		this.subscriptions.put(subscription.getTopic(), subscList);
+		//TODO>:REMOVE
+		System.out.println(String.format("Client: %s:%s on %s",
+				subscription.getIp(), subscription.getPort(),
+				subscription.getTopic()));
 	}
 }
