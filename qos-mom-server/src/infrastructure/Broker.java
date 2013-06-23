@@ -59,7 +59,8 @@ public class Broker implements Runnable {
 						jsonMessage);
 				
 				//filter subscriptions (topic region)
-				if(message.getHeaders().get(Constants.MESSAGE_TYPE).equals(Constants.SUBSCRIPTION_TYPE)){
+				if(message.getHeaders().containsKey(Constants.MESSAGE_TYPE)
+						&& message.getHeaders().get(Constants.MESSAGE_TYPE).equals(Constants.SUBSCRIPTION_TYPE)){
 					//the message payload contains json serialized subscription
 					Subscription subscription = JsonSerializer.getInstance().getSubscription(message.getPayload());
 					this.topicChannel.subscribe(subscription);

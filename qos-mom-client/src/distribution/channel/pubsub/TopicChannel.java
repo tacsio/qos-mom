@@ -40,6 +40,9 @@ public class TopicChannel {
 
 	public void publish(String topic, Message msg) {
 		Map<String, String> headers = msg.getHeaders();
+		if(null == headers){
+			headers = new HashMap<String, String>();
+		}
 		headers.put(Constants.CHANNEL, Constants.CHANNEL_TOPIC);
 		headers.put(Constants.TOPIC_NAME, topic);
 		msg.setHeaders(headers);
@@ -60,7 +63,7 @@ public class TopicChannel {
 			List<Subscription> subList = new ArrayList<Subscription>();
 			this.subscriptions.put(topic, subList);
 		}
-		// Armazena calback (vira do subscription chamada do método onMessage)
+		// Armazena calback (vira do subscription chamada do mï¿½todo onMessage)
 		// o mapa de callback por topico eh chamado via updateSubscrivers
 		subscription.setIp(this.broker.getLocalIp());
 		subscription.setPort(this.broker.getListenerPort());

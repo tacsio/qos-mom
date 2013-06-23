@@ -3,5 +3,5 @@
 	<server-host>192.168.1.102</server-host>
 	<ptp-port>6561</ptp-port>
 	<pubsub-port>6562</pubsub-port>
-	<listener-port>6563</listener-port>
+	<listener-port>6565</listener-port>
 </configuration>
