@@ -1,6 +1,6 @@
 package util;
 
-import java.io.File;
+import java.net.URL;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -15,7 +15,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Configuration {
 
-	private static final String CONFIG = "config.xml";
+	private static final String CONFIG = "/config.xml";
 
 	@XmlElement(name = "server-host")
 	private String serverHost;
@@ -47,12 +47,13 @@ public class Configuration {
 	}
 
 	public static Configuration load() {
-		File file = new File(CONFIG);
+		
+		URL url = Configuration.class.getResource(CONFIG);
 		Configuration config = null;
 		try {
 			config = (Configuration) JAXBContext
 					.newInstance(Configuration.class).createUnmarshaller()
-					.unmarshal(file);
+					.unmarshal(url);
 		} catch (JAXBException e) {
 			e.printStackTrace();
 		}
