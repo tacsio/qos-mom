@@ -21,3 +21,4 @@ doc
 target/*.class
 *.pdf
 *.jpg
+config.xml
