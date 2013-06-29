@@ -1,8 +1,10 @@
 package infrastructure;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -76,9 +78,8 @@ public class Broker implements Runnable {
 		String json = JsonSerializer.getInstance().getJson(msg);
 		Socket client = new Socket(this.serverHost, this.serverPort);
 
-		ObjectOutputStream out = new ObjectOutputStream(
-				client.getOutputStream());
-		out.writeObject(json);
+		OutputStream out = client.getOutputStream();
+		out.write(json.getBytes());
 		out.flush();
 		client.close();
 	}
@@ -91,15 +92,10 @@ public class Broker implements Runnable {
 		try {
 			ServerSocket listenSocket = new ServerSocket(this.listenerPort);
 			Socket connection;
-			ObjectInputStream input;
-			// ObjectOutputStream output;
 
 			while (true) {
 				connection = listenSocket.accept();
-				// output = new
-				// ObjectOutputStream(connection.getOutputStream());
-				input = new ObjectInputStream(connection.getInputStream());
-				String jsonMessage = (String) input.readObject();
+				String jsonMessage = getStringFromInputStream(connection.getInputStream());
 				Message message = JsonSerializer.getInstance().getMessage(
 						jsonMessage);
 
@@ -113,11 +109,35 @@ public class Broker implements Runnable {
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
 		}
 	}
 
+	private static String getStringFromInputStream(InputStream is) {
+
+		BufferedReader br = null;
+		StringBuilder sb = new StringBuilder();
+
+		String line;
+		try {
+			br = new BufferedReader(new InputStreamReader(is));
+			while ((line = br.readLine()) != null) {
+				sb.append(line);
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (br != null) {
+				try {
+					br.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return sb.toString();
+	}
+	
 	private String getLocalIpAddress() throws SocketException {
 
 		String ip = null;

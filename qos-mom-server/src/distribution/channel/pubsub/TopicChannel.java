@@ -29,16 +29,20 @@ public class TopicChannel {
 	}
 
 	public synchronized void updateSubscribers(String topic, Message msg) {
-		for (Subscription s : this.subscriptions.get(topic)) {
-			try {
-				this.broker.send(msg, s.getIp(), s.getPort());
-			} catch (UnknownHostException e) {
-				e.printStackTrace();
-				// TODO: add on non sended list
-			} catch (IOException e) {
-				e.printStackTrace();
-				// TODO: add on non sended list
+		if(null != this.subscriptions.get(topic)){
+			for (Subscription s : this.subscriptions.get(topic)) {
+				try {
+					this.broker.send(msg, s.getIp(), s.getPort());
+				} catch (UnknownHostException e) {
+					e.printStackTrace();
+					// TODO: add on non sended list
+				} catch (IOException e) {
+					e.printStackTrace();
+					// TODO: add on non sended list
+				}
 			}
+		} else {
+			System.out.println("No subscribers for " + msg);
 		}
 	}
 
