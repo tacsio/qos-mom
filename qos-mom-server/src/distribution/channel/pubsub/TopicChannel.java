@@ -70,7 +70,7 @@ public class TopicChannel {
 		try{
 			RedisStorage.getInstance().put(key, msg.getPayload());
 		} catch (Exception e) {
-			System.err.println("Database off");
+			System.out.println("Database off");
 		}
 	}
 }
