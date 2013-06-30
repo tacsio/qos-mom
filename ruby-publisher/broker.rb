@@ -17,6 +17,6 @@ class Broker
 	end
 
 	def local_ip
-		Socket::getaddrinfo(Socket.gethostname,"echo",Socket::AF_INET)[0][3]
+		Socket.ip_address_list.detect { |i| i.ipv4_private?}.ip_address 
 	end
 end
