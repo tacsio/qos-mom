@@ -15,4 +15,8 @@ class Broker
 		sock.send(msg.to_json, 0)
 		sock.close
 	end
+
+	def local_ip
+		Socket::getaddrinfo(Socket.gethostname,"echo",Socket::AF_INET)[0][3]
+	end
 end

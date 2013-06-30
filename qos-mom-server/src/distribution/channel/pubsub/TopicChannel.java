@@ -9,8 +9,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import service.storage.redis.RedisStorage;
 import util.Configuration;
-
+import util.Constants;
 import distribution.message.Message;
 import distribution.message.Subscription;
 
@@ -29,6 +30,7 @@ public class TopicChannel {
 	}
 
 	public synchronized void updateSubscribers(String topic, Message msg) {
+		this.saveMessage(topic, msg);
 		if(null != this.subscriptions.get(topic)){
 			for (Subscription s : this.subscriptions.get(topic)) {
 				try {
@@ -46,6 +48,7 @@ public class TopicChannel {
 		}
 	}
 
+
 	public synchronized void subscribe(Subscription subscription) {
 		List<Subscription> subscList = this.subscriptions.get(subscription
 				.getTopic());
@@ -58,5 +61,16 @@ public class TopicChannel {
 		System.out.println(String.format("Client: %s:%s on %s",
 				subscription.getIp(), subscription.getPort(),
 				subscription.getTopic()));
+	}
+
+	private void saveMessage(String topic, Message msg) {
+		String ip = msg.getHeaders().get(Constants.SOURCE);
+		String timestamp = System.currentTimeMillis()+"";
+		String key = topic + "#" + ip + "#" + timestamp;
+		try{
+			RedisStorage.getInstance().put(key, msg.getPayload());
+		} catch (Exception e) {
+			System.err.println("Database off");
+		}
 	}
 }
