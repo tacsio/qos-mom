@@ -1,0 +1,4 @@
+config:
+  server-host: 192.168.1.100
+  ptp-port: 6561
+  pubsub-port: 6562

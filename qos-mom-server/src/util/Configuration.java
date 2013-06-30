@@ -20,10 +20,10 @@ public class Configuration {
 	@XmlElement(name = "server-host")
 	private String serverHost;
 
-	@XmlElement(name = "ptp-port")
+	@XmlElement(name = "pubsub-port")
 	private int serverPubSubPort;
 
-	@XmlElement(name ="pubsub-port")
+	@XmlElement(name ="ptp-port")
 	private int serverPtpPort;
 
 	

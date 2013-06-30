@@ -16,12 +16,3 @@ class Broker
 		sock.close
 	end
 end
-
-
-m = Message.new
-m.headers['channel'] = 'topic'
-m.headers['topic_name'] = 'test'
-m.payload = 'Hello ruby'
-
-b = Broker.new '192.168.1.100', 6561
-b.send(m)

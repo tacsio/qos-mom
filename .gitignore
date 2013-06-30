@@ -22,4 +22,5 @@ target/*.class
 *.pdf
 *.jpg
 config.xml
+config.yml
 .fatjar
