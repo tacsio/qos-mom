@@ -17,7 +17,7 @@ public class Publisher {
 				e.printStackTrace();
 			}
 			Message msg = new Message();
-			msg.setPayload("availability " + random.nextInt(100));
+			msg.setPayload("availability:" + random.nextInt(100));
 			channel.publish("qos", msg);
 			System.out.println("msg published: " + msg.getPayload());
 		}

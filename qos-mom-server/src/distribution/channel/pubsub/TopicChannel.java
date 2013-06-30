@@ -65,7 +65,7 @@ public class TopicChannel {
 
 	private void saveMessage(String topic, Message msg) {
 		String ip = msg.getHeaders().get(Constants.SOURCE);
-		String timestamp = System.currentTimeMillis()+"";
+		String timestamp = msg.getHeaders().get(Constants.TIMESTAMP);
 		String key = topic + "#" + ip + "#" + timestamp;
 		try{
 			RedisStorage.getInstance().put(key, msg.getPayload());

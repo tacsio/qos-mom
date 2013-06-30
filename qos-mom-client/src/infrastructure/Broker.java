@@ -101,7 +101,7 @@ public class Broker implements Runnable {
 
 				if (message.getHeaders().get(Constants.CHANNEL)
 						.equals(Constants.CHANNEL_PTP)) {
-					// TODO: receive msg ptp
+					this.queueChannel.updateReceivers(message);
 				} else if (message.getHeaders().get(Constants.CHANNEL)
 						.equals(Constants.CHANNEL_TOPIC)) {
 					this.topicChannel.updateSubscribers(message);

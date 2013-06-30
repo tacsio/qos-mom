@@ -16,6 +16,7 @@ class TopicChannel
 		msg.headers = Hash.new unless msg.headers
 		msg.headers[:channel] = 'topic'
 		msg.headers[:topic_name] = topic
+		msg.headers[:timestamp] = (Time.now.to_f*1000).to_i
 
 		source_ip = @broker.local_ip
 		msg.headers[:source] = source_ip unless source_ip.empty?

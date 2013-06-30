@@ -1,12 +1,13 @@
 package distribution.channel.ptp;
 
+import infrastructure.Broker;
+
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.Map;
 
 import util.Configuration;
 import util.Constants;
-import infrastructure.Broker;
 import distribution.message.Message;
 
 public class QueueChannel {
@@ -27,6 +28,9 @@ public class QueueChannel {
 		this.broker = Broker.getBroker(this.config.getServerHost(),
 				this.config.getServerPtpPort(), this.config.getListenerPort());
 		this.broker.setQueueChannel(this);
+	}
+	
+	public synchronized void updateReceivers(Message msg) {
 	}
 
 	public void send(String queueName, Message msg) {

@@ -46,6 +46,7 @@ public class TopicChannel {
 		headers.put(Constants.CHANNEL, Constants.CHANNEL_TOPIC);
 		headers.put(Constants.TOPIC_NAME, topic);
 		headers.put(Constants.SOURCE, this.broker.getLocalIp());
+		headers.put(Constants.TIMESTAMP, System.currentTimeMillis()+"");
 		msg.setHeaders(headers);
 
 		try {

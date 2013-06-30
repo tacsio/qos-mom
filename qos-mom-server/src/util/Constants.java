@@ -11,4 +11,5 @@ public class Constants {
 	public final static String SOURCE= "source";
 	public final static String MESSAGE_TYPE= "message_type";
 	public final static String SUBSCRIPTION_TYPE = "subscription";
+	public static final String TIMESTAMP = "timestamp";
 }
