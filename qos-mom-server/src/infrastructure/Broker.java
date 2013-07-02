@@ -10,26 +10,17 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 import service.marshalling.JsonSerializer;
-import util.Constants;
-import distribution.channel.ptp.QueueChannel;
-import distribution.channel.pubsub.TopicChannel;
+import distribution.filter.MessageFilter;
 import distribution.message.Message;
-import distribution.message.Subscription;
 
 public class Broker implements Runnable {
 
 	private int port;
-	private QueueChannel queueChannel;
-	private TopicChannel topicChannel;
+	private MessageFilter messageFilter;
 
-	public Broker(QueueChannel queueRegion, int port) {
+	public Broker(MessageFilter messageFilter, int port) {
 		this.port = port;
-		this.queueChannel = queueRegion;
-	}
-	
-	public Broker(TopicChannel topicRegion, int port) {
-		this.port = port;
-		this.topicChannel = topicRegion;
+		this.messageFilter = messageFilter;
 	}
 	
 	public void send(Message msg, String ip, int port) throws UnknownHostException, IOException {
@@ -53,30 +44,7 @@ public class Broker implements Runnable {
 			while (true) {
 				connection = listenSocket.accept();
 				String jsonMessage = getStringFromInputStream(connection.getInputStream());
-				Message message = JsonSerializer.getInstance().getMessage(
-						jsonMessage);
-				
-				//filter subscriptions (topic region)
-				if(message.getHeaders().containsKey(Constants.MESSAGE_TYPE)
-						&& message.getHeaders().get(Constants.MESSAGE_TYPE).equals(Constants.SUBSCRIPTION_TYPE)){
-					//the message payload contains json serialized subscription
-					Subscription subscription = JsonSerializer.getInstance().getSubscription(message.getPayload());
-					this.topicChannel.subscribe(subscription);
-				//filter channel queue
-				} else if (message.getHeaders().get(Constants.CHANNEL)
-						.equals(Constants.CHANNEL_PTP)) {
-
-					String queueName = message.getHeaders().get(
-							Constants.QUEUE_NAME);
-					this.queueChannel.add(queueName, message);
-				
-				//filter channel topic
-				} else if (message.getHeaders().get(Constants.CHANNEL)
-						.equals(Constants.CHANNEL_TOPIC)) {
-					String topicName = message.getHeaders().get(
-							Constants.TOPIC_NAME);
-					this.topicChannel.updateSubscribers(topicName, message);
-				}
+				this.messageFilter.filterMessages(jsonMessage);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

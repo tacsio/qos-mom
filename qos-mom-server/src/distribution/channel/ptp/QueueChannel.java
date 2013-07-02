@@ -8,6 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingDeque;
 
 import util.Configuration;
+import distribution.filter.MessageFilter;
 import distribution.message.Message;
 
 public class QueueChannel {
@@ -19,7 +20,7 @@ public class QueueChannel {
 	public QueueChannel() {
 		this.queues = new ConcurrentHashMap<String, Queue<Message>>();
 		this.config = Configuration.load();
-		this.broker = new Broker(this, config.getServerPtpPort());
+		this.broker = new Broker(new MessageFilter(this), config.getServerPtpPort());
 		Thread listener = new Thread(this.broker);
 		listener.start();
 	}

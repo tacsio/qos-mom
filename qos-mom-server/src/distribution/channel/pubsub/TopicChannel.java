@@ -12,6 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import service.storage.redis.RedisStorage;
 import util.Configuration;
 import util.Constants;
+import distribution.filter.MessageFilter;
 import distribution.message.Message;
 import distribution.message.Subscription;
 
@@ -24,7 +25,7 @@ public class TopicChannel {
 	public TopicChannel() {
 		this.subscriptions = new ConcurrentHashMap<String, List<Subscription>>();
 		this.config = Configuration.load();
-		this.broker = new Broker(this, config.getServerPubSubPort());
+		this.broker = new Broker(new MessageFilter(this), config.getServerPubSubPort());
 		Thread listener = new Thread(this.broker);
 		listener.start();
 	}
