@@ -12,6 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import service.storage.redis.RedisStorage;
 import util.Configuration;
 import util.Constants;
+import distribution.channel.DeadLetterChannel;
 import distribution.filter.MessageFilter;
 import distribution.message.Message;
 import distribution.message.Subscription;
@@ -37,11 +38,9 @@ public class TopicChannel {
 				try {
 					this.broker.send(msg, s.getIp(), s.getPort());
 				} catch (UnknownHostException e) {
-					e.printStackTrace();
-					// TODO: add on non sended list
+					DeadLetterChannel.publish(topic, msg);
 				} catch (IOException e) {
-					e.printStackTrace();
-					// TODO: add on non sended list
+					DeadLetterChannel.publish(topic, msg);
 				}
 			}
 		} else {
