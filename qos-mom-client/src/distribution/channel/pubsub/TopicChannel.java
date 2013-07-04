@@ -12,6 +12,7 @@ import infrastructure.Broker;
 import service.marshalling.JsonSerializer;
 import util.Configuration;
 import util.Constants;
+import distribution.message.ContentEnricher;
 import distribution.message.Message;
 import distribution.message.Subscription;
 
@@ -45,9 +46,9 @@ public class TopicChannel {
 		}
 		headers.put(Constants.CHANNEL, Constants.CHANNEL_TOPIC);
 		headers.put(Constants.TOPIC_NAME, topic);
-		headers.put(Constants.SOURCE, this.broker.getLocalIp());
-		headers.put(Constants.TIMESTAMP, System.currentTimeMillis()+"");
 		msg.setHeaders(headers);
+		
+		ContentEnricher.enrichMessage(msg);
 
 		try {
 			this.broker.send(msg);
